@@ -5,6 +5,7 @@ function(create_executable target)
 
     file(GLOB sources CONFIGURE_DEPENDS
         "${current_dir}/*.cpp"
+        "${current_dir}/*.h"
     )
 
     message(STATUS "[create_executable] Creating target: ${target}")

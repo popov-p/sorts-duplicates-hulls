@@ -7,10 +7,12 @@ function(enable_sanitizers target)
         endif()
     endif()
 
-    target_compile_options(${target} PRIVATE
-        $<$<AND:$<CONFIG:Debug>,$<BOOL:${USE_SANITIZERS}>>:-fsanitize=address -fno-omit-frame-pointer>
+    target_compile_options(${target} PUBLIC
+        $<$<AND:$<CONFIG:Debug>,$<BOOL:${USE_SANITIZERS}>>:-fsanitize=address -fno-omit-frame-pointer -fsanitize=leak>
     )
-    target_link_options(${target} PRIVATE
-        $<$<AND:$<CONFIG:Debug>,$<BOOL:${USE_SANITIZERS}>>:-fsanitize=address>
+    target_link_options(${target} PUBLIC
+        $<$<AND:$<CONFIG:Debug>,$<BOOL:${USE_SANITIZERS}>>:-fsanitize=address -fsanitize=leak>
     )
+    message(STATUS "[enable_sanitizers] Sanitizer flags: $<$<AND:$<CONFIG:Debug>,$<BOOL:${USE_SANITIZERS}>>:-fsanitize=address -fno-omit-frame-pointer>")
+
 endfunction()

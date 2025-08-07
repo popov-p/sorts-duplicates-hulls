@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.21.0)
 
 project(task-1-sorting
     VERSION 1.0.0
@@ -13,7 +13,6 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake")
-
 
 set(sorting_comparison_executable sort-comparison-exec)
 set(sorting_algorithms_static_lib sorting-algorithms)
