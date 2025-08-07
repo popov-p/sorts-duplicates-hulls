@@ -9,6 +9,12 @@ project(task-1-sorting
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(_DEBUG)
+endif()
+
+
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 
