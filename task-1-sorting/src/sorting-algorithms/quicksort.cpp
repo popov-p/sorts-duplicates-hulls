@@ -39,26 +39,40 @@ void* worker_thread(void* arg) {
     int min_size_for_thread = wargs->min_size_for_thread;
 
     QuickSortArgs task;
+
     while (dequeue_task(queue, &task)) {
         int64_t size = task.high - task.low + 1;
+        // printf("[Worker %ld] Dequeued task: low=%ld high=%ld size=%ld\n",
+        //        pthread_self(), task.low, task.high, size);
+        // fflush(stdout);
+
         if (size <= min_size_for_thread) {
+            // printf("[Worker %ld] Task size <= min_size (%d), sorting directly\n", pthread_self(), min_size_for_thread);
+            // fflush(stdout);
             quickSort(task.arr, task.low, task.high);
             task_queue_finish_task(queue);
             continue;
         }
 
         int64_t p = partition(task.arr, task.low, task.high);
-
-        if (p <= task.low || p >= task.high) {
-            quickSort(task.arr, task.low, task.high);
-            task_queue_finish_task(queue);
-            continue;
-        }
+        // printf("[Worker %ld] Partition returned: %ld\n", pthread_self(), p);
+        // fflush(stdout);
+        // if (p <= task.low || p >= task.high) {
+        //     printf("[Worker %ld] Partition index out of bounds, sorting directly\n", pthread_self());
+        //     fflush(stdout);
+        //     quickSort(task.arr, task.low, task.high);
+        //     task_queue_finish_task(queue);
+        //     continue;
+        // }
 
         QuickSortArgs left = {task.arr, task.low, p};
         QuickSortArgs right = {task.arr, p + 1, task.high};
 
+        // printf("[Worker %ld] Enqueuing left task: low=%ld high=%ld\n", pthread_self(), left.low, left.high);
+        // fflush(stdout);
         enqueue_task(queue, left);
+        // printf("[Worker %ld] Enqueuing right task: low=%ld high=%ld\n", pthread_self(), right.low, right.high);
+        // fflush(stdout);
         enqueue_task(queue, right);
 
         task_queue_finish_task(queue);
