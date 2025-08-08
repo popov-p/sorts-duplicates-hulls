@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="build_button">
           <property name="text">
@@ -42,9 +42,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QGraphicsView" name="graphicsView"/>
-      </item>
      </layout>
     </item>
    </layout>
@@ -55,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
