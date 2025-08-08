@@ -6,6 +6,11 @@ project(nppame
     LANGUAGES CXX
 )
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
@@ -21,8 +26,8 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-set(sorting_comparison_executable sort-comparison-exec)
 set(sorting_algorithms_static_lib sorting-algorithms)
+set(hull_building_demo_static_lib hull-building-demo)
 
 add_subdirectory(src)
 add_subdirectory(examples)

@@ -2,7 +2,7 @@
 
 ## Сборка и запуск
 ```bash
-export CC=clang
+export CC=clang \
 export CXX=clang++
 
 cd nppame

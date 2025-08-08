@@ -5,7 +5,7 @@ function(create_executable target)
 
     file(GLOB sources CONFIGURE_DEPENDS
         "${current_dir}/*.cpp"
-        "${current_dir}/*.h"
+        "${current_dir}/*.h"        
     )
 
     message(STATUS "[create_executable] Creating target: ${target}")
@@ -17,7 +17,7 @@ function(create_executable target)
     endforeach()
 
     if(ARGN)
-        message(STATUS "[create_executable] Linking with: ${ARGN}")
+        message(STATUS "[create_executable] Linking ${target} with: ${ARGN}")
     endif()
 
     add_executable(${target} ${sources})
