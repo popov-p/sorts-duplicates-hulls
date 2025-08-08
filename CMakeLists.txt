@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(nppame
     VERSION 1.0.0
-    DESCRIPTION "Вступительное задание"
+    DESCRIPTION "Вступительное задание (задания 1,2 и 3)"
     LANGUAGES CXX
 )
 
@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 set(sorting_comparison_executable sort-comparison-exec)
 set(sorting_algorithms_static_lib sorting-algorithms)
