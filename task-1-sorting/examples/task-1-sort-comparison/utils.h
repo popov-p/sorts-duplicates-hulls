@@ -17,6 +17,7 @@ void print_array(uint8_t* arr, int size);
 void assert_sorted_uint8(const uint8_t* data, size_t size);
 
 void run_quicksort_with_params(uint8_t* original_buffer, size_t buffer_size, int64_t num_threads, int64_t min_size_for_thread);
-void run_bucket_sort_with_params(uint8_t* original_buffer, size_t buffer_size, int64_t num_threads);
+void run_bucket_sort_with_params(uint8_t* original_buffer, size_t buffer_size,
+                                 uint8_t n_bucket, uint8_t interval, int64_t num_threads);
 
 #endif

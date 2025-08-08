@@ -20,8 +20,8 @@ typedef struct {
 } ThreadArgs;
 
 Node* insert(Node* head, uint8_t value);
-Node* InsertionSort(Node* list);
+Node* insertion_sort(Node* list);
 void* thread_func(void* arg);
-void BucketSortParallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8_t interval, uint8_t num_threads);
+void bucket_sort_parallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8_t interval, uint8_t num_threads);
 
 #endif

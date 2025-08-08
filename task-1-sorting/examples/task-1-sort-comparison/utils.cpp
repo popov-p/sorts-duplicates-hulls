@@ -123,28 +123,28 @@ void run_quicksort_with_params(uint8_t* original_buffer, size_t n, int64_t num_t
 }
 
 
-void run_bucket_sort_with_params(uint8_t* original_buffer, size_t buffer_size, int64_t num_threads) {
-
-    // printf("Initial array: ");
-    // print(original_buffer, buffer_size);
-    // printf("-------------\n");
+void run_bucket_sort_with_params(uint8_t* original_buffer, size_t buffer_size,
+                                 uint8_t n_bucket, uint8_t interval, int64_t num_threads) {
+    uint8_t* buffer_copy = (uint8_t*)malloc(buffer_size);
+    if (!buffer_copy) {
+        perror("malloc failed in run_bucket_sort_with_params");
+        exit(1);
+    }
+    memcpy(buffer_copy, original_buffer, buffer_size);
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
-    uint8_t n_bucket = 12;
-    uint8_t interval = 24;
 
-    BucketSortParallel(original_buffer, buffer_size, n_bucket, interval, num_threads);
+    bucket_sort_parallel(buffer_copy, buffer_size, n_bucket, interval, num_threads);
+
     clock_gettime(CLOCK_MONOTONIC, &end);
+
 
     double elapsed_sec = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Sort completed in %.12f seconds.\n", elapsed_sec);
     fflush(stdout);
 
-    // printf("-------------\n");
-    // printf("Sorted array: ");
-    // print(original_buffer, buffer_size);
+    assert_sorted_uint8(buffer_copy, buffer_size);
 
-    assert_sorted_uint8(original_buffer, buffer_size);
+    free(buffer_copy);
 }
-

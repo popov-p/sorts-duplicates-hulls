@@ -2,6 +2,9 @@
 
 ## Сборка и запуск
 ```bash
+export CC=clang
+export CXX=clang++
+
 cd nppame
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug -DUSE_SANITIZERS=On && make

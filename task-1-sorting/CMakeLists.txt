@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.21.0)
 
-project(task-1-sorting
+project(nppame
     VERSION 1.0.0
-    DESCRIPTION "Сравнение эффективности работы сортировок"
+    DESCRIPTION "Вступительное задание"
     LANGUAGES CXX
 )
 
@@ -14,7 +14,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(_DEBUG)
 endif()
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
