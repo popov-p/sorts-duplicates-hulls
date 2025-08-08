@@ -68,9 +68,8 @@ void print_array(uint8_t* arr, int size) {
 }
 
 void assert_sorted_uint8(const uint8_t* data, size_t size) {
-    for (size_t i = 1; i < size; ++i) {
+    for (size_t i = 1; i < size; ++i)
         assert(data[i - 1] <= data[i] && "Array is not sorted");
-    }
 }
 
 void write_stats_to_csv(int num_threads, int min_size, size_t n_elements, double time_sec, int max_queue_length) {
@@ -85,9 +84,8 @@ void write_stats_to_csv(int num_threads, int min_size, size_t n_elements, double
         return;
     }
 
-    if (write_header) {
+    if (write_header)
         fprintf(stats, "num_threads,min_size,n_elements,time_sec,max_queue_length\n");
-    }
 
     fprintf(stats, "%d,%d,%zu,%.3f,%d\n", num_threads, min_size, n_elements, time_sec, max_queue_length);
     fclose(stats);

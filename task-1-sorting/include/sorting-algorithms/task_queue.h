@@ -41,5 +41,6 @@ int task_queue_active_tasks(TaskQueue* queue);
 
 int task_queue_max_length(TaskQueue* queue);
 
+void task_queue_finish_task(TaskQueue* queue);
 
 #endif

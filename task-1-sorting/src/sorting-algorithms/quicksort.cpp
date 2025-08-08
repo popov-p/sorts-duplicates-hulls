@@ -43,11 +43,17 @@ void* worker_thread(void* arg) {
         int64_t size = task.high - task.low + 1;
         if (size <= min_size_for_thread) {
             quickSort(task.arr, task.low, task.high);
-            atomic_fetch_sub(&queue->active_tasks, 1);
+            task_queue_finish_task(queue);
             continue;
         }
 
         int64_t p = partition(task.arr, task.low, task.high);
+
+        if (p <= task.low || p >= task.high) {
+            quickSort(task.arr, task.low, task.high);
+            task_queue_finish_task(queue);
+            continue;
+        }
 
         QuickSortArgs left = {task.arr, task.low, p};
         QuickSortArgs right = {task.arr, p + 1, task.high};
@@ -55,7 +61,7 @@ void* worker_thread(void* arg) {
         enqueue_task(queue, left);
         enqueue_task(queue, right);
 
-        atomic_fetch_sub(&queue->active_tasks, 1);
+        task_queue_finish_task(queue);
     }
     return NULL;
 }
@@ -75,9 +81,10 @@ void parallel_quickSort(TaskQueue* queue, uint8_t arr[], int64_t low, int64_t hi
     QuickSortArgs initial = {arr, low, high};
     enqueue_task(queue, initial);
 
+    pthread_mutex_lock(&queue->mutex);
     while (task_queue_active_tasks(queue) > 0)
-        usleep(1000);
-
+        pthread_cond_wait(&queue->cond, &queue->mutex);
+    pthread_mutex_unlock(&queue->mutex);
     task_queue_stop(queue);
 
     for (int i = 0; i < num_threads; i++)

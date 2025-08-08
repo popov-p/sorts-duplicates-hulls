@@ -14,6 +14,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(_DEBUG)
 endif()
 
+set(CMAKE_CXX_STANDARD 11)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 

@@ -98,3 +98,13 @@ int task_queue_max_length(TaskQueue* queue) {
     pthread_mutex_unlock(&queue->mutex);
     return max_len;
 }
+
+void task_queue_finish_task(TaskQueue* queue) {
+    int remaining = atomic_fetch_sub(&queue->active_tasks, 1) - 1;
+
+    if (remaining == 0) {
+        pthread_mutex_lock(&queue->mutex);
+        pthread_cond_signal(&queue->cond);
+        pthread_mutex_unlock(&queue->mutex);
+    }
+}
