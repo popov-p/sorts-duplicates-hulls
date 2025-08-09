@@ -9,13 +9,14 @@
 
 inline uint qHash(const QPointF &key, uint seed = 0)
 {
-    return qHash(key.x(), seed) ^ qHash(key.y(), seed << 1);
+    return qHash(qMakePair(key.x(), key.y()), seed);
 }
+
 
 class QuickConvexHullAlgorithm : public QObject {
     Q_OBJECT
 signals:
-    void finished(const QList<QPointF>& hull_points);
+    void finished(const QVector<QPointF>& points, const QVector<QPointF>& hull_points);
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);
     ~QuickConvexHullAlgorithm() = default;
@@ -31,12 +32,12 @@ private:
         return 0;
     }
 
-    static int lineDist(const QPointF& p1, const QPointF& p2, const QPointF& p)
+    static qreal lineDist(const QPointF& p1, const QPointF& p2, const QPointF& p)
     {
         return std::abs((p.y() - p1.y()) * (p2.x() - p1.x()) - (p2.y() - p1.y()) * (p.x() - p1.x()));
     }
 
-    void quickHullParallel(const QVector<QPointF>& points, const QPointF& p1, const QPointF& p2, int side);
+    void quickHullParallelImpl(const QVector<QPointF>& points, const QPointF& p1, const QPointF& p2, int side);
 
     class QuickConvexHullTask : public QRunnable
     {
@@ -45,13 +46,13 @@ private:
         void run() override;
 
     private:
-        QuickConvexHullAlgorithm* parent;
-        QVector<QPointF> points;
-        QPointF p1, p2;
-        int side;
+        QuickConvexHullAlgorithm* _parent;
+        const QVector<QPointF>& _points;
+        QPointF _p1, _p2;
+        int _side;
     };
 
     QVector<QPointF> _data;
-    QSet<QPointF> _hull;
+    QVector<QPointF> _convex_hull;
     QMutex _hull_mutex;
 };

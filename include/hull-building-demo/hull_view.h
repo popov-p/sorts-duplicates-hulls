@@ -13,10 +13,11 @@ class HullView : public QGraphicsView
     Q_OBJECT
 public:
     explicit HullView(QWidget* parent = nullptr);
+    const int points_presented() const;
 public slots:
     bool pointsAreVisible(QGraphicsScene* scene);
-    void addPoint(const QPointF& point, qreal circleRadius = 0.02);
-    void connectPoints(const QList<QPointF>&);
+    void addPoint(const QPointF& point, qreal circleRadius = 0.08);
+    void connectPoints(const QVector<QPointF>&);
     void clearAll();
 protected:
     void wheelEvent(QWheelEvent* event) override;

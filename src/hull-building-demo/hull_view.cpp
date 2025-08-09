@@ -3,6 +3,11 @@
 #include <QWheelEvent>
 #include <QDebug>
 #include <QMessageBox>
+#include <cmath>
+
+const int HullView::points_presented() const {
+    return _points.length();
+}
 
 bool HullView::pointsAreVisible(QGraphicsScene* scene) {
     for (QGraphicsItem* item : scene->items())
@@ -49,7 +54,7 @@ HullView::HullView(QWidget* parent)
     setRenderHint(QPainter::Antialiasing);
     setTransformationAnchor(AnchorUnderMouse);
     resetTransform();
-    scale(100.0, 100.0);
+    scale(70.0, 70.0);
     setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
@@ -65,31 +70,34 @@ void HullView::addPoint(const QPointF& point, qreal circle_radius)
     _points.append(ellipse);
 }
 
-void HullView::connectPoints(const QList<QPointF>& hull_points)
+void HullView::connectPoints(const QVector<QPointF>& hull_points)
 {
     clearLines();
 
     if (hull_points.size() < 2)
         return;
 
-    if (_points.empty()) {
-        QMessageBox::critical(
-            this,
-            tr("Ошибка"),
-            tr("Нет точек для отображения!")
-            );
-        return;
+    QPointF center(0, 0);
+    for (const QPointF& p : hull_points) {
+        center += p;
     }
+    center /= hull_points.size();
 
-    for (int i = 0; i < hull_points.size() - 1; ++i)
+    QVector<QPointF> sortedPoints = hull_points;
+    std::sort(sortedPoints.begin(), sortedPoints.end(), [center](const QPointF& a, const QPointF& b) {
+        qreal angleA = std::atan2(a.y() - center.y(), a.x() - center.x());
+        qreal angleB = std::atan2(b.y() - center.y(), b.x() - center.x());
+        return angleA < angleB;
+    });
+
+    for (int i = 0; i < sortedPoints.size(); ++i)
     {
-        QPointF p1 = _points[i]->rect().center() + _points[i]->pos();
-        QPointF p2 = _points[i+1]->rect().center() + _points[i+1]->pos();
-        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(Qt::red, 0.02));
+        QPointF p1 = sortedPoints[i];
+        QPointF p2 = sortedPoints[(i + 1) % sortedPoints.size()];
+        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(Qt::red, 0.04));
         _lines.append(line);
     }
 }
-
 void HullView::clearAll()
 {
     for (auto* item : _points)
