@@ -4,10 +4,11 @@
 #include <QString>
 
 QuickConvexHullAlgorithm::QuickConvexHullAlgorithm(QObject* parent)
-    : QObject(parent) {};
+    : IHullAlgorithm(parent) {};
 
-QList<QPointF> QuickConvexHullAlgorithm::result() const {
-    return _convex_hull.values();
+
+const QSet<QPointF> QuickConvexHullAlgorithm::result() const {
+    return _convex_hull;
 }
 
 void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {

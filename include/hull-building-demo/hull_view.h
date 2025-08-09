@@ -20,14 +20,14 @@ public slots:
     void addPoint(const QPointF& point, qreal circleRadius = 0.04);
     void connectPoints(const QSet<QPointF>& hull_points);
     void clearAll();
-    void clearPoints();
 protected:
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 private:
+    void clearPoints();
+    void clearLines();
     QGraphicsScene* _scene;
     QVector<QGraphicsEllipseItem*> _points;
     QVector<QGraphicsLineItem*> _lines;
-    void clearLines();
 };

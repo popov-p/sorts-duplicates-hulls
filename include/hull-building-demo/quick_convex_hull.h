@@ -1,4 +1,7 @@
 #pragma once
+
+#include "i_algorithm.h"
+
 #include <QObject>
 #include <QSet>
 #include <QMutex>
@@ -7,24 +10,18 @@
 
 #include <QHash>
 
-inline uint qHash(const QPointF &key, uint seed = 0)
-{
-    return qHash(qMakePair(key.x(), key.y()), seed);
-}
-
-
-class QuickConvexHullAlgorithm : public QObject {
+class QuickConvexHullAlgorithm : public IHullAlgorithm {
     Q_OBJECT
 signals:
-    void finished(const QSet<QPointF>& hull_points);
+    void finished(const QSet<QPointF>& convex_hull_points);
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);
     ~QuickConvexHullAlgorithm() = default;
     void compute(const QVector<QPointF>& points);
 
-    QList<QPointF> result() const;
+    const QSet<QPointF> result() const override;
 private:
-    int findSide(const QPointF& p1, const QPointF& p2, const QPointF& p) {
+    static int findSide(const QPointF& p1, const QPointF& p2, const QPointF& p) {
         qreal val = (p.y() - p1.y()) * (p2.x() - p1.x()) - (p2.y() - p1.y()) * (p.x() - p1.x());
         if (val > 0)
             return 1;
@@ -33,7 +30,6 @@ private:
         else
             return 0;
     }
-
 
     static qreal lineDist(const QPointF& p1, const QPointF& p2, const QPointF& p)
     {

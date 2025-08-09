@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <cmath>
+#include <i_algorithm.h>
 
 const int HullView::points_presented() const {
     return _points.length();
@@ -78,12 +79,7 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points) {
     }
     center /= hull_points.size();
 
-    QVector<QPointF> sortedPoints(hull_points.constBegin(), hull_points.constEnd());
-    std::sort(sortedPoints.begin(), sortedPoints.end(), [center](const QPointF& a, const QPointF& b) {
-        qreal angleA = std::atan2(a.y() - center.y(), a.x() - center.x());
-        qreal angleB = std::atan2(b.y() - center.y(), b.x() - center.x());
-        return angleA < angleB;
-    });
+    QVector<QPointF> sortedPoints = IHullAlgorithm::sortPointsClockwise(hull_points);
 
     for (int i = 0; i < sortedPoints.size(); ++i)
     {

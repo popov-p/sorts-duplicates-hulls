@@ -4,6 +4,7 @@
 class HullView;
 class QuickConvexHullAlgorithm;
 class PointsDataManager;
+class ConcaveHullAlgorithm;
 
 namespace Ui {
 class MainWindow;
@@ -24,5 +25,6 @@ private:
     Ui::MainWindow* _ui;
     HullView* _view;
     PointsDataManager* _data_manager;
-    QuickConvexHullAlgorithm* _algorithm;
+    QuickConvexHullAlgorithm* _convex_algorithm;
+    ConcaveHullAlgorithm* _concave_algorithm;
 };

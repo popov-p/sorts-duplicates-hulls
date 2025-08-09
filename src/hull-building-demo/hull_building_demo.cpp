@@ -3,11 +3,12 @@
 #include "hull_view.h"
 #include "quick_convex_hull.h"
 #include "points_manager.h"
+#include "concave_hull.h"
 
 #include <QPushButton>
 #include <QDebug>
 
-QuickConvexHullAlgorithm* HullBuildingDemo::algorithm() { return _algorithm; }
+QuickConvexHullAlgorithm* HullBuildingDemo::algorithm() { return _convex_algorithm; }
 
 HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow) {
     _ui->setupUi(this);
@@ -18,19 +19,27 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
     if(!_data_manager->loadPoints(config.file_path))
         qFatal("Unable to load points from file.");
 
-    _algorithm = new QuickConvexHullAlgorithm(this);
+    _convex_algorithm = new QuickConvexHullAlgorithm(this);
+    _concave_algorithm =  new ConcaveHullAlgorithm(this);
 
-    connect(_algorithm, &QuickConvexHullAlgorithm::finished, this, [this](const QSet<QPointF>& hull_points) {
-        auto add_points = [this]() {
-            for (const QPointF& p : *_data_manager->points())
-                _view->addPoint(QPointF(p));
-        };
+    auto add_points = [this]() {
+        for (const QPointF& p : *_data_manager->points())
+            _view->addPoint(QPointF(p));
+    };
+
+    connect(_convex_algorithm, &QuickConvexHullAlgorithm::finished, this, [this, add_points](const QSet<QPointF>& convex_hull_points) {
         qInfo() << "&QuickConvexHullAlgorithm::finished";
-        _view->clearAll();
-        if(_data_manager->points()->empty() || !_view->points_presented())
+        if(!_data_manager->points()->empty() || !_view->points_presented())
             add_points();
 
-        _view->connectPoints(hull_points);
+        _view->connectPoints(convex_hull_points);
+    });
+    connect(_concave_algorithm, &ConcaveHullAlgorithm::finished, this, [this, add_points](const QSet<QPointF>& concave_hull_points) {
+        qInfo() << "&ConcaveHullAlgorithm::finished";
+        if(!_data_manager->points()->empty() || !_view->points_presented())
+            add_points();
+
+        _view->connectPoints(concave_hull_points);
     });
 
     connect(_ui->clear_area_button, &QPushButton::clicked, _view, &HullView::clearAll);
@@ -41,10 +50,11 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
             _view->addPoint(point);
         }
     });
-
     connect(_ui->build_button, &QPushButton::clicked, _view, [this]() {
         const auto& points = *_data_manager->points();
-        _algorithm->compute(points);
+        _convex_algorithm->compute(points);
+        _concave_algorithm->compute(points,
+                                    IHullAlgorithm::sortPointsClockwise(_convex_algorithm->result()));
     });
 
     _ui->emplace_points_button->click();
