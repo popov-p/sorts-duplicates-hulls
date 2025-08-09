@@ -39,8 +39,6 @@ private:
         return idx;
     }
 
-#include <QDebug>
-
     static bool pointsEqual(const QPointF& a, const QPointF& b) {
         const double EPS = 1e-12;
         return std::abs(a.x() - b.x()) < EPS && std::abs(a.y() - b.y()) < EPS;
@@ -52,7 +50,7 @@ private:
             const double EPS = 1e-12;
             if (std::abs(val) < EPS) {
                 qDebug() << "orientation: points are collinear:" << a << b << c;
-                return 0; // коллинеарны
+                return 0;
             }
             int result = (val > 0) ? 1 : 2;
             qDebug() << "orientation:" << a << b << c << "->" << (result == 1 ? "clockwise" : "counterclockwise");
@@ -123,7 +121,6 @@ private:
         qDebug() << "Пересечений не найдено.";
         return false;
     }
-
 
     static bool isCrossHull(const QPointF& pb, const QPointF& pt, const QVector<QPointF>& hull) {
         for (int i = 0; i < hull.size(); ++i) {

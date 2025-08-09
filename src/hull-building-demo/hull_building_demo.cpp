@@ -39,7 +39,7 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
         if(!_data_manager->points()->empty() || !_view->points_presented())
             add_points();
 
-        _view->connectPoints(concave_hull_points);
+        _view->connectPoints(concave_hull_points, Qt::green);
     });
 
     connect(_ui->clear_area_button, &QPushButton::clicked, _view, &HullView::clearAll);

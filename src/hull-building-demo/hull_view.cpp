@@ -67,8 +67,7 @@ void HullView::addPoint(const QPointF& point, qreal circle_radius) {
     _points.append(ellipse);
 }
 
-void HullView::connectPoints(const QSet<QPointF>& hull_points) {
-    clearLines();
+void HullView::connectPoints(const QSet<QPointF>& hull_points, const QColor& color, qreal width) {
 
     if (hull_points.size() < 2)
         return;
@@ -85,7 +84,7 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points) {
     {
         QPointF p1 = sortedPoints[i];
         QPointF p2 = sortedPoints[(i + 1) % sortedPoints.size()];
-        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(Qt::red, 0.04));
+        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(color, 0.04));
         _lines.append(line);
     }
 }
