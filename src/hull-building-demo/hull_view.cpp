@@ -68,7 +68,6 @@ void HullView::addPoint(const QPointF& point, qreal circle_radius) {
 }
 
 void HullView::connectPoints(const QSet<QPointF>& hull_points, const QColor& color, qreal width) {
-
     if (hull_points.size() < 2)
         return;
 

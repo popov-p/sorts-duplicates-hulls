@@ -1,5 +1,7 @@
 #include "concave_hull.h"
 #include <QDebug>
+#include <QFuture>
+#include <QtConcurrent>
 
 ConcaveHullAlgorithm::ConcaveHullAlgorithm(QObject* parent) : IHullAlgorithm(parent) {
 
@@ -19,64 +21,63 @@ void ConcaveHullAlgorithm::compute(const QVector<QPointF>& points, const QVector
             G.append(pt);
     }
 
-    qInfo() << "Initial convex hull points H:" << H;
-    qInfo() << "Points outside convex hull G:" << G;
+    // qInfo() << "Initial convex hull points H:" << H;
+    // qInfo() << "Points outside convex hull G:" << G;
 
     while (true) {
         int m = indexMaxSide(H);
         QPointF pb = H[m];
         QPointF pe = H[(m + 1) % H.size()];
 
-        qInfo() << "\nProcessing edge between points at indices" << m << "и" << (m + 1) % H.size();
-        qInfo() << "pb:" << pb << ", pe:" << pe;
+        // qInfo() << "\nProcessing edge between points at indices" << m << "и" << (m + 1) % H.size();
+        // qInfo() << "pb:" << pb << ", pe:" << pe;
 
-        int jpt = -1;
         double qd0 = squaredDist(pb, pe);
         double Smin = 4 * qd0;
 
-        qInfo() << "qd0 (sq distance between pb and pe):" << qd0;
-        qInfo() << "Initial Smin:" << Smin;
+        // qInfo() << "qd0 (sq distance between pb and pe):" << qd0;
+        // qInfo() << "Initial Smin:" << Smin;
 
+        if (G.isEmpty()) {
+            // qInfo() << "No points outside hull remain, finishing.";
+            break;
+        }
+
+        QVector<QFuture<Candidate>> futures;
         for (int i = 0; i < G.size(); ++i) {
-            const QPointF& pt = G[i];
-            double qd1 = squaredDist(pb, pt);
-            double qd2 = squaredDist(pe, pt);
+            auto task = [=, &G, &H]() -> Candidate {
+                return checkCandidate(i, G, pb, pe, gamma, H, Smin);
+            };
+            futures.append(QtConcurrent::run(task));
+        }
 
-            if (qd1 + qd2 - qd0 > gamma * std::min(qd1, qd2)) {
-                qInfo() << "Skipping point" << pt << "due to distance condition.";
-                continue;
-            }
+        for (auto& f : futures) {
+            f.waitForFinished();
+        }
 
-            double St = triangleArea(pb, pt, pe);
-
-            qInfo() << "Checking point" << pt << ": St =" << St;
-
-            if (St < Smin) {
-                if (isCrossHull(pb, pt, H)) {
-                    qInfo() << "Skipping point" << pt << "because it crosses hull.";
-                    continue;
-                }
-                jpt = i;
-                Smin = St;
-                qInfo() << "Point" << pt << "is a new candidate with Smin =" << Smin;
+        Candidate bestCandidate{-1, Smin, false};
+        for (int i = 0; i < futures.size(); ++i) {
+            Candidate c = futures[i].result();
+            if (c.valid && c.Smin < bestCandidate.Smin) {
+                bestCandidate = c;
             }
         }
 
-        if (jpt >= 0) {
-            qInfo() << "Inserting point" << G[jpt] << "into hull at position" << m + 1;
-            H.insert(m + 1, G[jpt]);
-            G.removeAt(jpt);
+        if (bestCandidate.valid) {
+            // qInfo() << "Inserting point" << G[bestCandidate.index] << "into hull at position" << m + 1;
+            H.insert(m + 1, G[bestCandidate.index]);
+            G.removeAt(bestCandidate.index);
 
-            qInfo() << "Updated hull points H:" << H;
-            qInfo() << "Remaining points G:" << G;
+            // qInfo() << "Updated hull points H:" << H;
+            // qInfo() << "Remaining points G:" << G;
         } else {
-            qInfo() << "No suitable point found for insertion, finishing.";
+            // qInfo() << "No suitable point found for insertion, finishing.";
             break;
         }
     }
 
     _concave_hull = {H.begin(), H.end()};
-    qInfo() << "Final concave hull points:" << _concave_hull;
+    // qInfo() << "Final concave hull points:" << _concave_hull;
     emit finished(QSet<QPointF>(H.begin(), H.end()));
 }
 
