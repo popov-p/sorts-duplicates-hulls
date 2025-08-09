@@ -14,21 +14,17 @@ class HullView : public QGraphicsView
 public:
     explicit HullView(QWidget* parent = nullptr);
 public slots:
-    void addPoint(const QPointF& point, qreal circleRadius = 5.0);
-    void connectPoints();
+    bool pointsAreVisible(QGraphicsScene* scene);
+    void addPoint(const QPointF& point, qreal circleRadius = 0.02);
+    void connectPoints(const QList<QPointF>&);
     void clearAll();
 protected:
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 private:
-    QGraphicsScene* scene;
-    QVector<QGraphicsEllipseItem*> points;
-    QVector<QGraphicsLineItem*> lines;
-    void clearLines()
-    {
-        for (auto line : lines)
-            scene->removeItem(line);
-        lines.clear();
-    }
+    QGraphicsScene* _scene;
+    QVector<QGraphicsEllipseItem*> _points;
+    QVector<QGraphicsLineItem*> _lines;
+    void clearLines();
 };

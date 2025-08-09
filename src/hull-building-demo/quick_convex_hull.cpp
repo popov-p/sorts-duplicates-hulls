@@ -32,7 +32,7 @@ void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
     pool->start(new QuickConvexHullTask(this, _data, _data[minX], _data[maxX], -1));
 
     pool->waitForDone();
-
+    qInfo() << "Нашли: " << _hull.values();
     emit finished(_hull.values());
 }
 
@@ -60,8 +60,6 @@ void QuickConvexHullAlgorithm::quickHullParallel(const QVector<QPointF>& points,
     pool->start(new QuickConvexHullTask(this, points, points[idx], p1, -findSide(points[idx], p1, p2)));
     pool->start(new QuickConvexHullTask(this, points, points[idx], p2, -findSide(points[idx], p2, p1)));
 }
-
-
 
 QuickConvexHullAlgorithm::QuickConvexHullTask::QuickConvexHullTask(QuickConvexHullAlgorithm* parent, const QVector<QPointF>& pts, const QPointF& p1, const QPointF& p2, int side)
     : parent(parent), points(pts), p1(p1), p2(p2), side(side)

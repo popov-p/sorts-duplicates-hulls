@@ -4,6 +4,7 @@
 class HullView;
 class QuickConvexHullAlgorithm;
 class PointsDataManager;
+
 namespace Ui {
 class MainWindow;
 }
@@ -11,6 +12,7 @@ class MainWindow;
 typedef struct HullConfig {
     QString file_path;
 } HullConfig;
+
 class HullBuildingDemo : public QMainWindow {
     Q_OBJECT
 public:

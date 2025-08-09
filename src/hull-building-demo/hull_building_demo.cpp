@@ -5,6 +5,8 @@
 #include "points_manager.h"
 
 #include <QPushButton>
+#include <QDebug>
+
 QuickConvexHullAlgorithm* HullBuildingDemo::algorithm() { return _algorithm; }
 
 HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow) {
@@ -19,10 +21,12 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
     _algorithm = new QuickConvexHullAlgorithm(this);
 
     connect(_algorithm, &QuickConvexHullAlgorithm::finished, this, [this](const QList<QPointF>& hull_points) {
-        for (const QPointF& p : hull_points)
-            _view->addPoint(QPointF(p));
+        qInfo() << "&QuickConvexHullAlgorithm::finished";
+        if(_data_manager->points()->empty())
+            for (const QPointF& p : *_data_manager->points())
+                _view->addPoint(QPointF(p));
 
-        _view->connectPoints();
+        _view->connectPoints(hull_points);
     });
 
     connect(_ui->clear_area_button, &QPushButton::clicked, _view, &HullView::clearAll);
