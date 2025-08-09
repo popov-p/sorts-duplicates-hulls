@@ -37,13 +37,11 @@ private:
 
         double St = triangleArea(pb, pt, pe);
 
-        if (St >= currentSmin) {
+        if (St >= currentSmin)
             return c;
-        }
 
-        if (isCrossHull(pb, pt, H)) {
+        if (isCrossHull(pb, pt, H))
             return c;
-        }
 
         c.valid = true;
         c.Smin = St;

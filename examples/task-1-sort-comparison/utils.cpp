@@ -76,7 +76,7 @@ void assert_sorted_uint8(const uint8_t* data, size_t size) {
         assert(data[i - 1] <= data[i] && "Array is not sorted");
 }
 
-void write_stats_to_csv(int num_threads, int min_size, size_t n_elements, double time_sec, int max_queue_length) {
+void write_quicksort_stats_to_csv(int num_threads, int min_size, size_t n_elements, double time_sec, int max_queue_length) {
     const char* filename = "quicksort-stats.csv";
     struct stat st;
     int file_exists = stat(filename, &st) == 0;
@@ -94,6 +94,26 @@ void write_stats_to_csv(int num_threads, int min_size, size_t n_elements, double
     fprintf(stats, "%d,%d,%zu,%.8f,%d\n", num_threads, min_size, n_elements, time_sec, max_queue_length);
     fclose(stats);
 }
+
+void write_bucket_sort_stats_to_csv(int num_threads, int n_bucket, int interval, size_t n_elements, double time_sec) {
+    const char* filename = "bucketsort-stats.csv";
+    struct stat st;
+    int file_exists = stat(filename, &st) == 0;
+    int write_header = !file_exists || st.st_size == 0;
+
+    FILE* stats = fopen(filename, "a");
+    if (!stats) {
+        perror("Failed to open bucketsort-stats.csv");
+        return;
+    }
+
+    if (write_header)
+        fprintf(stats, "num_threads,n_bucket,interval,n_elements,time_sec\n");
+
+    fprintf(stats, "%d,%d,%d,%zu,%.8f\n", num_threads, n_bucket, interval, n_elements, time_sec);
+    fclose(stats);
+}
+
 
 void run_quicksort_with_params(uint8_t* original_buffer, size_t n, int64_t num_threads, int64_t min_size_for_thread) {
     uint8_t* buffer = (uint8_t*)malloc(n);
@@ -114,7 +134,7 @@ void run_quicksort_with_params(uint8_t* original_buffer, size_t n, int64_t num_t
     printf("Sort completed in %.8f seconds.\n", elapsed_sec);
     fflush(stdout);
 
-    write_stats_to_csv(num_threads, min_size_for_thread, n, elapsed_sec, queue->max_length);
+    write_quicksort_stats_to_csv(num_threads, min_size_for_thread, n, elapsed_sec, queue->max_length);
 
     assert_sorted_uint8(buffer, n);
     task_queue_destroy(queue);
@@ -144,6 +164,7 @@ void run_bucket_sort_with_params(uint8_t* original_buffer, size_t buffer_size,
     printf("Sort completed in %.12f seconds.\n", elapsed_sec);
     fflush(stdout);
 
+    write_bucket_sort_stats_to_csv(num_threads,n_bucket, interval, buffer_size, elapsed_sec);
     assert_sorted_uint8(buffer_copy, buffer_size);
 
     free(buffer_copy);

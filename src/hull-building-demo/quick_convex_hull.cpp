@@ -21,25 +21,25 @@ void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
         return;
     }
 
-    int minX = 0, maxX = 0;
+    int min_x = 0, max_x = 0;
     for (int i = 1; i < _data.size(); ++i) {
-        if (_data[i].x() < _data[minX].x()) minX = i;
-        if (_data[i].x() > _data[maxX].x()) maxX = i;
+        if (_data[i].x() < _data[min_x].x()) min_x = i;
+        if (_data[i].x() > _data[max_x].x()) max_x = i;
     }
 
     // qInfo() << "Leftmost point:" << _data[minX];
     // qInfo() << "Rightmost point:" << _data[maxX];
 
     QThreadPool* pool = QThreadPool::globalInstance();
-    int oldMaxThreads = pool->maxThreadCount();
+    int old_max_threads = pool->maxThreadCount();
     pool->setMaxThreadCount(QThread::idealThreadCount());
 
-    pool->start(new QuickConvexHullTask(this, _data, _data[minX], _data[maxX], 1));
-    pool->start(new QuickConvexHullTask(this, _data, _data[minX], _data[maxX], -1));
+    pool->start(new QuickConvexHullTask(this, _data, _data[min_x], _data[max_x], 1));
+    pool->start(new QuickConvexHullTask(this, _data, _data[min_x], _data[max_x], -1));
 
     pool->waitForDone();
 
-    pool->setMaxThreadCount(oldMaxThreads);
+    pool->setMaxThreadCount(old_max_threads);
 
     // qInfo() << "_convex_hull:" << _convex_hull;
     // qInfo() << "_points:" << _data;
@@ -57,8 +57,8 @@ void QuickConvexHullAlgorithm::quickHullParallelImpl(
 
     for (int i = 0; i < points.size(); ++i) {
         qreal dist = lineDist(p1, p2, points[i]);
-        int sideOfPoint = findSide(p1, p2, points[i]);
-        if (sideOfPoint == side && dist > max_dist) {
+        int side_of_point = findSide(p1, p2, points[i]);
+        if (side_of_point == side && dist > max_dist) {
             // qInfo() << "Distance from point" << points[i] << "to line segment" << p1 << "-" << p2
             //         << "is" << dist << ", side =" << sideOfPoint;
             idx = i;

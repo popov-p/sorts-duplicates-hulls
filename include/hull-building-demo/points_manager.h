@@ -10,8 +10,8 @@ public:
     explicit PointsDataManager(QObject* parent = nullptr);
 
     QSharedPointer<QVector<QPointF>> points() const;
-    bool loadPoints(const QString& filePath);
-    bool savePoints(const QString& filePath, const QVector<QPointF>& points);
+    bool loadPoints(const QString& file_path);
+    bool savePoints(const QString& file_path, const QVector<QPointF>& points);
 private:
     QSharedPointer<QVector<QPointF>> _points;
 };

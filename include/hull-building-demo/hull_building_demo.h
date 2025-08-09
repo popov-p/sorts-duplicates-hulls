@@ -6,6 +6,8 @@ class QuickConvexHullAlgorithm;
 class PointsDataManager;
 class ConcaveHullAlgorithm;
 
+class QElapsedTimer;
+
 namespace Ui {
 class MainWindow;
 }
@@ -27,4 +29,5 @@ private:
     PointsDataManager* _data_manager;
     QuickConvexHullAlgorithm* _convex_algorithm;
     ConcaveHullAlgorithm* _concave_algorithm;
+    QElapsedTimer* _timer;
 };

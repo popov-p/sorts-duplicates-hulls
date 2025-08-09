@@ -16,8 +16,6 @@ public:
     explicit IHullAlgorithm(QObject* parent = nullptr) : QObject(parent) {}
     virtual ~IHullAlgorithm() = default;
 
-    // virtual void compute(const QVector<QPointF>& points) = 0;
-
     virtual const QSet<QPointF> result() const = 0;
 
     static QVector<QPointF> sortPointsClockwise(const QSet<QPointF>& points) {

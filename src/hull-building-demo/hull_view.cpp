@@ -38,11 +38,11 @@ void HullView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void HullView::wheelEvent(QWheelEvent* event) {
-    constexpr double scaleFactor = 1.15;
+    constexpr double scale_factor = 1.15;
     if (event->angleDelta().y() > 0) {
-        scale(scaleFactor, scaleFactor);
+        scale(scale_factor, scale_factor);
     } else {
-        scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        scale(1.0 / scale_factor, 1.0 / scale_factor);
     }
 }
 
@@ -77,13 +77,13 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points, const QColor& col
     }
     center /= hull_points.size();
 
-    QVector<QPointF> sortedPoints = IHullAlgorithm::sortPointsClockwise(hull_points);
+    QVector<QPointF> sorted_points = IHullAlgorithm::sortPointsClockwise(hull_points);
 
-    for (int i = 0; i < sortedPoints.size(); ++i)
+    for (int i = 0; i < sorted_points.size(); ++i)
     {
-        QPointF p1 = sortedPoints[i];
-        QPointF p2 = sortedPoints[(i + 1) % sortedPoints.size()];
-        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(color, 0.04));
+        QPointF p1 = sorted_points[i];
+        QPointF p2 = sorted_points[(i + 1) % sorted_points.size()];
+        QGraphicsLineItem* line = _scene->addLine(QLineF(p1, p2), QPen(color, width));
         _lines.append(line);
     }
 }

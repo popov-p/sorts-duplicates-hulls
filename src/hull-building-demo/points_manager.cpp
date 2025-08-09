@@ -7,15 +7,15 @@
 QSharedPointer<QVector<QPointF>> PointsDataManager::points() const { return _points; }
 PointsDataManager::PointsDataManager(QObject* parent) : QObject(parent) {}
 
-bool PointsDataManager::loadPoints(const QString& filePath)
+bool PointsDataManager::loadPoints(const QString& file_path)
 {
-    QFile file(filePath);
+    QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "Cannot open file for reading:" << filePath;
+        qWarning() << "Cannot open file for reading:" << file_path;
         return false;
     }
 
-    auto loadedPoints = QSharedPointer<QVector<QPointF>>::create();
+    auto loaded_points = QSharedPointer<QVector<QPointF>>::create();
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
@@ -26,17 +26,17 @@ bool PointsDataManager::loadPoints(const QString& filePath)
         if (parts.size() != 2)
             continue;
 
-        bool okX = false, okY = false;
-        double x = parts[0].toDouble(&okX);
-        double y = parts[1].toDouble(&okY);
-        if (okX && okY)
-            loadedPoints->append(QPointF(x, y));
+        bool ok_x = false, ok_y = false;
+        double x = parts[0].toDouble(&ok_x);
+        double y = parts[1].toDouble(&ok_y);
+        if (ok_x && ok_y)
+            loaded_points->append(QPointF(x, y));
     }
 
     file.close();
 
-    if (!loadedPoints->isEmpty()) {
-        _points = loadedPoints;
+    if (!loaded_points->isEmpty()) {
+        _points = loaded_points;
         return true;
     }
 

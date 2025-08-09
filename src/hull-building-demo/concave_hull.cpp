@@ -29,7 +29,7 @@ void ConcaveHullAlgorithm::compute(const QVector<QPointF>& points, const QVector
         QPointF pb = H[m];
         QPointF pe = H[(m + 1) % H.size()];
 
-        // qInfo() << "\nProcessing edge between points at indices" << m << "и" << (m + 1) % H.size();
+        // qInfo() << "\nProcessing edge between points at indices" << m << "and" << (m + 1) % H.size();
         // qInfo() << "pb:" << pb << ", pe:" << pe;
 
         double qd0 = squaredDist(pb, pe);

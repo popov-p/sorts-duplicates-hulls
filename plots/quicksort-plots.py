@@ -16,7 +16,7 @@ def plot_benchmarks(csv_path):
         subset = df[df['min_size'] == min_size]
         plt.plot(subset['num_threads'], subset['time_sec'], marker='o', label=f"min_size={min_size}")
 
-    plt.title("Время сортировки от количества потоков")
+    plt.title(r"Время сортировки от количества потоков, $n = 2 \cdot 10^9$")
     plt.xlabel("Количество потоков")
     plt.ylabel("Время (секунды)")
     plt.legend()
@@ -28,7 +28,7 @@ def plot_benchmarks(csv_path):
         subset = df[df['num_threads'] == num_threads]
         plt.plot(subset['min_size'], subset['time_sec'], marker='o', label=f"threads={num_threads}")
 
-    plt.title("Время сортировки от min_size")
+    plt.title(r"Время сортировки от min_size, $n = 2 \cdot 10^9$")
     plt.xlabel("min_size")
     plt.ylabel("Время (секунды)")
     plt.legend()
@@ -40,7 +40,7 @@ def plot_benchmarks(csv_path):
         subset = df[df['min_size'] == min_size]
         plt.plot(subset['num_threads'], subset['max_queue_length'], marker='o', label=f"min_size={min_size}")
 
-    plt.title("Макс. длина очереди от количества потоков")
+    plt.title(r"Макс. длина очереди от количества потоков, $n = 2 \cdot 10^9$")
     plt.xlabel("Количество потоков")
     plt.ylabel("Макс. длина очереди")
     plt.legend()
