@@ -16,8 +16,7 @@ bool HullView::pointsAreVisible(QGraphicsScene* scene) {
     return false;
 }
 
-void HullView::mousePressEvent(QMouseEvent* event)
-{
+void HullView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         setDragMode(QGraphicsView::ScrollHandDrag);
         viewport()->setCursor(Qt::ArrowCursor);
@@ -27,8 +26,7 @@ void HullView::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void HullView::mouseReleaseEvent(QMouseEvent* event)
-{
+void HullView::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         setDragMode(QGraphicsView::NoDrag);
         viewport()->setCursor(Qt::ArrowCursor);
@@ -38,7 +36,7 @@ void HullView::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void HullView::wheelEvent(QWheelEvent* event){
+void HullView::wheelEvent(QWheelEvent* event) {
     constexpr double scaleFactor = 1.15;
     if (event->angleDelta().y() > 0) {
         scale(scaleFactor, scaleFactor);
@@ -48,8 +46,7 @@ void HullView::wheelEvent(QWheelEvent* event){
 }
 
 HullView::HullView(QWidget* parent)
-    : QGraphicsView(parent), _scene(new QGraphicsScene(this))
-{
+    : QGraphicsView(parent), _scene(new QGraphicsScene(this)) {
     setScene(_scene);
     setRenderHint(QPainter::Antialiasing);
     setTransformationAnchor(AnchorUnderMouse);
@@ -58,8 +55,7 @@ HullView::HullView(QWidget* parent)
     setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
-void HullView::addPoint(const QPointF& point, qreal circle_radius)
-{
+void HullView::addPoint(const QPointF& point, qreal circle_radius) {
     qreal r = circle_radius;
 
     QGraphicsEllipseItem* ellipse = _scene->addEllipse(
@@ -70,8 +66,7 @@ void HullView::addPoint(const QPointF& point, qreal circle_radius)
     _points.append(ellipse);
 }
 
-void HullView::connectPoints(const QSet<QPointF>& hull_points)
-{
+void HullView::connectPoints(const QSet<QPointF>& hull_points) {
     clearLines();
 
     if (hull_points.size() < 2)
@@ -98,18 +93,25 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points)
         _lines.append(line);
     }
 }
-void HullView::clearAll()
-{
-    for (auto* item : _points)
-        _scene->removeItem(item);
-    _points.clear();
-
+void HullView::clearAll() {
     clearLines();
+    clearPoints();
 }
 
-void HullView::clearLines()
-{
-    for (auto line : _lines)
+void HullView::clearLines() {
+    for (auto* line : _lines) {
         _scene->removeItem(line);
+        delete line;
+    }
     _lines.clear();
 }
+
+void HullView::clearPoints()
+{
+    for (auto* ellipse : _points) {
+        _scene->removeItem(ellipse);
+        delete ellipse;
+    }
+    _points.clear();
+}
+

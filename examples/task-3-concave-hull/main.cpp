@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
-
+#include <QTimer>
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     QCommandLineParser parser;
@@ -26,6 +26,7 @@ int main(int argc, char** argv) {
     HullBuildingDemo d({file_path});
     d.show();
 
+    // QTimer::singleShot(1000, &app, &QCoreApplication::quit);
     app.exec();
     return 0;
 }

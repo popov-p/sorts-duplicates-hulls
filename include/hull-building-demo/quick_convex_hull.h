@@ -16,7 +16,7 @@ inline uint qHash(const QPointF &key, uint seed = 0)
 class QuickConvexHullAlgorithm : public QObject {
     Q_OBJECT
 signals:
-    void finished(const QVector<QPointF>& points, const QSet<QPointF>& hull_points);
+    void finished(const QSet<QPointF>& hull_points);
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);
     ~QuickConvexHullAlgorithm() = default;

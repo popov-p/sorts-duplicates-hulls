@@ -16,7 +16,7 @@ void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
 
     if (_data.size() < 3) {
         qWarning() << "Convex hull not possible (less than 3 points)";
-        emit finished({},{});
+        emit finished({});
         return;
     }
 
@@ -26,8 +26,8 @@ void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
         if (_data[i].x() > _data[maxX].x()) maxX = i;
     }
 
-    qInfo() << "Leftmost point:" << _data[minX];
-    qInfo() << "Rightmost point:" << _data[maxX];
+    // qInfo() << "Leftmost point:" << _data[minX];
+    // qInfo() << "Rightmost point:" << _data[maxX];
 
     QThreadPool* pool = QThreadPool::globalInstance();
     int oldMaxThreads = pool->maxThreadCount();
@@ -40,16 +40,16 @@ void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
 
     pool->setMaxThreadCount(oldMaxThreads);
 
-    qInfo() << "_convex_hull:" << _convex_hull;
-    qInfo() << "_points:" << _data;
-    emit finished(points, _convex_hull);
+    // qInfo() << "_convex_hull:" << _convex_hull;
+    // qInfo() << "_points:" << _data;
+    emit finished(_convex_hull);
 }
 
 void QuickConvexHullAlgorithm::quickHullParallelImpl(
     const QVector<QPointF>& points, const QPointF& p1, const QPointF& p2, int side)
 {
-    qInfo() << "quickHullParallelImpl called with side" << side
-            << ", segment points:" << p1 << p2;
+    // qInfo() << "quickHullParallelImpl called with side" << side
+    //         << ", segment points:" << p1 << p2;
 
     int idx = -1;
     qreal max_dist = 0.0;
@@ -58,8 +58,8 @@ void QuickConvexHullAlgorithm::quickHullParallelImpl(
         qreal dist = lineDist(p1, p2, points[i]);
         int sideOfPoint = findSide(p1, p2, points[i]);
         if (sideOfPoint == side && dist > max_dist) {
-            qInfo() << "Distance from point" << points[i] << "to line segment" << p1 << "-" << p2
-                    << "is" << dist << ", side =" << sideOfPoint;
+            // qInfo() << "Distance from point" << points[i] << "to line segment" << p1 << "-" << p2
+            //         << "is" << dist << ", side =" << sideOfPoint;
             idx = i;
             max_dist = dist;
         }
@@ -68,13 +68,13 @@ void QuickConvexHullAlgorithm::quickHullParallelImpl(
         QMutexLocker locker(&_hull_mutex);
         _convex_hull.insert(p1);
         _convex_hull.insert(p2);
-        qInfo() << "No further points on side" << side << ". Added points to hull:"
-                << p1 << p2;
+        // qInfo() << "No further points on side" << side << ". Added points to hull:"
+        //         << p1 << p2;
         return;
     }
 
-    qInfo() << "Found farthest point at index" << idx << ":" << points[idx]
-            << "distance:" << max_dist;
+    // qInfo() << "Found farthest point at index" << idx << ":" << points[idx]
+    //         << "distance:" << max_dist;
 
     QThreadPool* pool = QThreadPool::globalInstance();
     pool->start(new QuickConvexHullTask(this, points, points[idx], p1, -findSide(points[idx], p1, p2)));
