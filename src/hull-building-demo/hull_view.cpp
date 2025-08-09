@@ -70,7 +70,7 @@ void HullView::addPoint(const QPointF& point, qreal circle_radius)
     _points.append(ellipse);
 }
 
-void HullView::connectPoints(const QVector<QPointF>& hull_points)
+void HullView::connectPoints(const QSet<QPointF>& hull_points)
 {
     clearLines();
 
@@ -83,7 +83,7 @@ void HullView::connectPoints(const QVector<QPointF>& hull_points)
     }
     center /= hull_points.size();
 
-    QVector<QPointF> sortedPoints = hull_points;
+    QVector<QPointF> sortedPoints(hull_points.constBegin(), hull_points.constEnd());
     std::sort(sortedPoints.begin(), sortedPoints.end(), [center](const QPointF& a, const QPointF& b) {
         qreal angleA = std::atan2(a.y() - center.y(), a.x() - center.x());
         qreal angleB = std::atan2(b.y() - center.y(), b.x() - center.x());

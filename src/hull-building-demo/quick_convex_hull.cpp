@@ -7,7 +7,7 @@ QuickConvexHullAlgorithm::QuickConvexHullAlgorithm(QObject* parent)
     : QObject(parent) {};
 
 QList<QPointF> QuickConvexHullAlgorithm::result() const {
-    return _convex_hull.toList();
+    return _convex_hull.values();
 }
 
 void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
@@ -66,25 +66,10 @@ void QuickConvexHullAlgorithm::quickHullParallelImpl(
     }
     if (idx == -1) {
         QMutexLocker locker(&_hull_mutex);
-        QString addedPoints;
-
-        if (!_convex_hull.contains(p1)) {
-            _convex_hull.append(p1);
-            addedPoints += QString("(%1, %2)").arg(p1.x()).arg(p1.y());
-        }
-        if (!_convex_hull.contains(p2)) {
-            _convex_hull.append(p2);
-            if (!addedPoints.isEmpty())
-                addedPoints += ",";
-            addedPoints += QString("(%1, %2)").arg(p2.x()).arg(p2.y());
-        }
-
-        if (!addedPoints.isEmpty()) {
-            qInfo() << "No further points on side" << side << ". Added points to hull:" << addedPoints.trimmed();
-        } else {
-            qInfo() << "No further points on side" << side << ". No new points added to hull.";
-        }
-
+        _convex_hull.insert(p1);
+        _convex_hull.insert(p2);
+        qInfo() << "No further points on side" << side << ". Added points to hull:"
+                << p1 << p2;
         return;
     }
 

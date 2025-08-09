@@ -21,7 +21,7 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
     _algorithm = new QuickConvexHullAlgorithm(this);
 
     connect(_algorithm, &QuickConvexHullAlgorithm::finished, this, [this](const QVector<QPointF>& points,
-                                                                          const QVector<QPointF>& hull_points) {
+                                                                          const QSet<QPointF>& hull_points) {
         auto add_points = [this]() {
             for (const QPointF& p : *_data_manager->points())
                 _view->addPoint(QPointF(p));

@@ -17,7 +17,7 @@ public:
 public slots:
     bool pointsAreVisible(QGraphicsScene* scene);
     void addPoint(const QPointF& point, qreal circleRadius = 0.08);
-    void connectPoints(const QVector<QPointF>&);
+    void connectPoints(const QSet<QPointF>& hull_points);
     void clearAll();
 protected:
     void wheelEvent(QWheelEvent* event) override;

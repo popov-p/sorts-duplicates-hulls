@@ -16,7 +16,7 @@ inline uint qHash(const QPointF &key, uint seed = 0)
 class QuickConvexHullAlgorithm : public QObject {
     Q_OBJECT
 signals:
-    void finished(const QVector<QPointF>& points, const QVector<QPointF>& hull_points);
+    void finished(const QVector<QPointF>& points, const QSet<QPointF>& hull_points);
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);
     ~QuickConvexHullAlgorithm() = default;
@@ -24,13 +24,16 @@ public:
 
     QList<QPointF> result() const;
 private:
-    static int findSide(const QPointF& p1, const QPointF& p2, const QPointF& p)
-    {
-        int val = (p.y() - p1.y()) * (p2.x() - p1.x()) - (p2.y() - p1.y()) * (p.x() - p1.x());
-        if (val > 0) return 1;
-        if (val < 0) return -1;
-        return 0;
+    int findSide(const QPointF& p1, const QPointF& p2, const QPointF& p) {
+        qreal val = (p.y() - p1.y()) * (p2.x() - p1.x()) - (p2.y() - p1.y()) * (p.x() - p1.x());
+        if (val > 0)
+            return 1;
+        else if (val < 0)
+            return -1;
+        else
+            return 0;
     }
+
 
     static qreal lineDist(const QPointF& p1, const QPointF& p2, const QPointF& p)
     {
@@ -53,6 +56,6 @@ private:
     };
 
     QVector<QPointF> _data;
-    QVector<QPointF> _convex_hull;
+    QSet<QPointF> _convex_hull;
     QMutex _hull_mutex;
 };
