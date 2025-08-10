@@ -1,6 +1,6 @@
 #pragma once
-#pragma once
-#include <qobject.h>
+
+#include <QObject>
 #include <QPoint>
 #include <QSet>
 #include <cmath>
@@ -23,9 +23,9 @@ public:
             return {};
 
         QPointF center(0, 0);
-        for (const QPointF& p : points) {
+        for (const QPointF& p : points)
             center += p;
-        }
+
         center /= points.size();
 
         QVector<QPointF> sortedPoints(points.constBegin(), points.constEnd());

@@ -7,7 +7,7 @@ function(create_static_library target)
     file(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/${target}/*.h)
     file(GLOB UI_FORMS ${CMAKE_SOURCE_DIR}/src/${target}/*.ui)
 
-    message(STATUS "${target} CONTENTS: \n \t ${SOURCES} \n \t ${HEADERS} \n \t ${UI_FORMS} \n ")
+    message(STATUS "[create_static_library] ${target} contents: \n \t ${SOURCES} \n \t ${HEADERS} \n \t ${UI_FORMS} \n ")
 
     target_include_directories(${target} PUBLIC ${CMAKE_SOURCE_DIR}/include/${target})
 

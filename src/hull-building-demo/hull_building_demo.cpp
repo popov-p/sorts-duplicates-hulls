@@ -4,6 +4,7 @@
 #include "quick_convex_hull.h"
 #include "points_manager.h"
 #include "concave_hull.h"
+
 #include <QPushButton>
 #include <QDebug>
 #include <QElapsedTimer>

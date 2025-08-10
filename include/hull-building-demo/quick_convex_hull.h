@@ -7,7 +7,6 @@
 #include <QMutex>
 #include <QPointF>
 #include <QRunnable>
-
 #include <QHash>
 
 class QuickConvexHullAlgorithm : public IHullAlgorithm {

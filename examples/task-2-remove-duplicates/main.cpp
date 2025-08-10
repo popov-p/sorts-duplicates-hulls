@@ -12,7 +12,7 @@ void generate_random_data(const char* filename, size_t count) {
     std::ofstream fout(filename);
     if (!fout.is_open()) {
         std::cerr << "Ошибка создания файла " << filename << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     std::random_device rd;
@@ -41,13 +41,13 @@ void process_unique_data(const char* input_filename, const char* output_filename
     std::ifstream fin(input_filename);
     if (!fin.is_open()) {
         std::cerr << "Ошибка открытия файла: " << input_filename << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     std::ofstream fout(output_filename);
     if (!fout.is_open()) {
         std::cerr << "Ошибка создания файла " << output_filename << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     std::unordered_set<std::tuple<float, float, float>, TupleHash> seen;

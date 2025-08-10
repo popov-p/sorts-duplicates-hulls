@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(nppame
     VERSION 1.0.0
-    DESCRIPTION "Вступительное задание (задания 1,2 и 3)"
+    DESCRIPTION "Вступительное задание (задания 1, 2 и 3)"
     LANGUAGES CXX
 )
 

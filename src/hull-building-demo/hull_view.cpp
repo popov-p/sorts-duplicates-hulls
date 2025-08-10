@@ -1,10 +1,9 @@
 #include "hull_view.h"
+#include <i_algorithm.h>
 
 #include <QWheelEvent>
-#include <QDebug>
 #include <QMessageBox>
 #include <cmath>
-#include <i_algorithm.h>
 
 const int HullView::points_presented() const {
     return _points.length();
@@ -13,7 +12,7 @@ const int HullView::points_presented() const {
 bool HullView::pointsAreVisible(QGraphicsScene* scene) {
     for (QGraphicsItem* item : scene->items())
         if (item->isVisible())
-                return true;
+            return true;
     return false;
 }
 
@@ -22,9 +21,8 @@ void HullView::mousePressEvent(QMouseEvent* event) {
         setDragMode(QGraphicsView::ScrollHandDrag);
         viewport()->setCursor(Qt::ArrowCursor);
         QGraphicsView::mousePressEvent(event);
-    } else {
+    } else
         QGraphicsView::mousePressEvent(event);
-    }
 }
 
 void HullView::mouseReleaseEvent(QMouseEvent* event) {
@@ -32,18 +30,16 @@ void HullView::mouseReleaseEvent(QMouseEvent* event) {
         setDragMode(QGraphicsView::NoDrag);
         viewport()->setCursor(Qt::ArrowCursor);
         QGraphicsView::mouseReleaseEvent(event);
-    } else {
+    } else
         QGraphicsView::mouseReleaseEvent(event);
-    }
 }
 
 void HullView::wheelEvent(QWheelEvent* event) {
-    constexpr double scale_factor = 1.15;
-    if (event->angleDelta().y() > 0) {
+    const double scale_factor = 1.15;
+    if (event->angleDelta().y() > 0)
         scale(scale_factor, scale_factor);
-    } else {
+    else
         scale(1.0 / scale_factor, 1.0 / scale_factor);
-    }
 }
 
 HullView::HullView(QWidget* parent)

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>

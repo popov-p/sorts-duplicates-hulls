@@ -37,7 +37,7 @@ void enqueue_task(TaskQueue* queue, QuickSortArgs args) {
     Task* task = (Task*)malloc(sizeof(Task));
     if (!task) {
         perror("Malloc failed in enqueue_task");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     task->args = args;
     task->next = NULL;
@@ -56,9 +56,6 @@ void enqueue_task(TaskQueue* queue, QuickSortArgs args) {
 
     int active = atomic_fetch_add(&queue->active_tasks, 1) + 1;
     (void)active;
-    // printf("[Queue] Enqueue: low=%lld high=%lld active_tasks=%d current_length=%d\n",
-    //        (long long)args.low, (long long)args.high, active, queue->current_length);
-    // fflush(stdout);
 
     pthread_cond_signal(&queue->cond);
     pthread_mutex_unlock(&queue->mutex);
@@ -66,16 +63,11 @@ void enqueue_task(TaskQueue* queue, QuickSortArgs args) {
 
 int dequeue_task(TaskQueue* queue, QuickSortArgs* out) {
     pthread_mutex_lock(&queue->mutex);
-    while (!queue->head && !queue->stop) {
-        // printf("[Queue] Waiting for tasks...\n");
-        // fflush(stdout);
+    while (!queue->head && !queue->stop)
         pthread_cond_wait(&queue->cond, &queue->mutex);
-    }
 
     if (queue->stop && !queue->head) {
         pthread_mutex_unlock(&queue->mutex);
-        // printf("[Queue] Stop signal received, dequeue exiting.\n");
-        // fflush(stdout);
         return 0;
     }
     Task* task = queue->head;
@@ -113,14 +105,10 @@ int task_queue_max_length(TaskQueue* queue) {
 void task_queue_finish_task(TaskQueue* queue) {
     int remaining = atomic_fetch_sub(&queue->active_tasks, 1) - 1;
     (void)remaining;
-    // printf("[Queue] Finished task, remaining active_tasks=%d, currentTasks=%d\n",
-    //        remaining, queue->current_length);
-    // fflush(stdout);
 
     if (remaining == 0) {
         pthread_mutex_lock(&queue->mutex);
         pthread_cond_broadcast(&queue->cond);
         pthread_mutex_unlock(&queue->mutex);
-        // printf("[Queue] All tasks finished, signaled main thread.\n");
     }
 }

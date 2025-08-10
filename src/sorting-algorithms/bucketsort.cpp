@@ -90,9 +90,8 @@ Node* merge_k_sorted_lists(Node** lists, size_t k) {
 
     size_t interval = 1;
     while (interval < k) {
-        for (size_t i = 0; i + interval < k; i += interval * 2) {
+        for (size_t i = 0; i + interval < k; i += interval * 2)
             lists[i] = merge_two_sorted_lists(lists[i], lists[i + interval]);
-        }
         interval *= 2;
     }
     return lists[0];
@@ -102,17 +101,17 @@ Node* merge_k_sorted_lists(Node** lists, size_t k) {
 void bucket_sort_parallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8_t interval, uint8_t num_threads) {
     if (n_bucket == 0) {
         fprintf(stderr, "Error: n_bucket must be > 0\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (interval == 0) {
         fprintf(stderr, "Error: interval must be > 0\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (num_threads == 0) {
         fprintf(stderr, "Error: num_threads must be > 0\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     pthread_t threads[num_threads];
@@ -126,7 +125,6 @@ void bucket_sort_parallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8
     }
 
     size_t chunk = (n_array + num_threads - 1) / num_threads;
-
 
     for (uint8_t t = 0; t < num_threads; ++t) {
         args[t].thread_id = t;
@@ -146,9 +144,8 @@ void bucket_sort_parallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8
     size_t idx = 0;
     for (uint8_t b = 0; b < n_bucket; ++b) {
         Node** lists_to_merge = (Node**)malloc(sizeof(Node*) * num_threads);
-        for (uint8_t t = 0; t < num_threads; ++t) {
+        for (uint8_t t = 0; t < num_threads; ++t)
             lists_to_merge[t] = local_buckets[t][b];
-        }
 
         Node* merged = merge_k_sorted_lists(lists_to_merge, num_threads);
 
@@ -172,5 +169,4 @@ void bucket_sort_parallel(uint8_t arr[], size_t n_array, uint8_t n_bucket, uint8
         free(local_buckets[t]);
 
     free(local_buckets);
-
 }

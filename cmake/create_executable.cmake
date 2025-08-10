@@ -13,7 +13,7 @@ function(create_executable target)
     message(STATUS "[create_executable] Source files found:")
     
     foreach(src IN LISTS sources)
-        message(STATUS "  ---> ${src}")
+        message(STATUS " [create_executable] ${src}")
     endforeach()
 
     if(ARGN)
