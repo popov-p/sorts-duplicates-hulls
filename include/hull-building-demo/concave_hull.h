@@ -1,5 +1,5 @@
 #pragma once
-#include <i_algorithm.h>
+#include <hull_algorithm.h>
 
 #include <QObject>
 #include <QDebug>
@@ -10,7 +10,7 @@ struct Candidate {
     bool valid;
 };
 
-class ConcaveHullAlgorithm : public IHullAlgorithm {
+class ConcaveHullAlgorithm : public HullAlgorithm {
     Q_OBJECT
 public:
     ConcaveHullAlgorithm(QObject* parent = nullptr);

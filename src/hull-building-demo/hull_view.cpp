@@ -1,5 +1,5 @@
 #include "hull_view.h"
-#include <i_algorithm.h>
+#include <hull_algorithm.h>
 
 #include <QWheelEvent>
 #include <QMessageBox>
@@ -73,7 +73,7 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points, const QColor& col
     }
     center /= hull_points.size();
 
-    QVector<QPointF> sorted_points = IHullAlgorithm::sortPointsClockwise(hull_points);
+    QVector<QPointF> sorted_points = HullAlgorithm::sortPointsClockwise(hull_points);
 
     for (int i = 0; i < sorted_points.size(); ++i)
     {

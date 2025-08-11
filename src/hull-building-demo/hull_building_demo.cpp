@@ -62,7 +62,7 @@ HullBuildingDemo::HullBuildingDemo(HullConfig config, QWidget* parent) : QMainWi
 
         _timer->restart();
         _concave_algorithm->compute(points,
-                                    IHullAlgorithm::sortPointsClockwise(_convex_algorithm->result()));
+                                    HullAlgorithm::sortPointsClockwise(_convex_algorithm->result()));
         qint64 concave_time = _timer->elapsed();
         qDebug() << "Concave hull compute time (ms):" << concave_time;
     });

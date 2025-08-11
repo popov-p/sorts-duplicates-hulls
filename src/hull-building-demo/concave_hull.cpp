@@ -4,7 +4,7 @@
 #include <QFuture>
 #include <QtConcurrent>
 
-ConcaveHullAlgorithm::ConcaveHullAlgorithm(QObject* parent) : IHullAlgorithm(parent) {};
+ConcaveHullAlgorithm::ConcaveHullAlgorithm(QObject* parent) : HullAlgorithm(parent) {};
 
 void ConcaveHullAlgorithm::compute(const QVector<QPointF>& points, const QVector<QPointF>& convex_hull, const qreal gamma) {
     if (convex_hull.isEmpty()) {

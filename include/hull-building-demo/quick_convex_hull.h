@@ -1,6 +1,6 @@
 #pragma once
 
-#include "i_algorithm.h"
+#include "hull_algorithm.h"
 
 #include <QObject>
 #include <QSet>
@@ -9,7 +9,7 @@
 #include <QRunnable>
 #include <QHash>
 
-class QuickConvexHullAlgorithm : public IHullAlgorithm {
+class QuickConvexHullAlgorithm : public HullAlgorithm {
     Q_OBJECT
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);

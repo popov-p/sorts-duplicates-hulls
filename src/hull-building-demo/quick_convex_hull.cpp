@@ -5,7 +5,7 @@
 #include <QString>
 
 QuickConvexHullAlgorithm::QuickConvexHullAlgorithm(QObject* parent)
-    : IHullAlgorithm(parent) {};
+    : HullAlgorithm(parent) {};
 
 void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
     _hull.clear();

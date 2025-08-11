@@ -10,11 +10,11 @@ inline uint qHash(const QPointF &key, uint seed = 0)
     return qHash(qMakePair(key.x(), key.y()), seed);
 }
 
-class IHullAlgorithm : public QObject {
+class HullAlgorithm : public QObject {
     Q_OBJECT
 public:
-    explicit IHullAlgorithm(QObject* parent = nullptr) : QObject(parent) {}
-    virtual ~IHullAlgorithm() = default;
+    explicit HullAlgorithm(QObject* parent = nullptr) : QObject(parent) {}
+    virtual ~HullAlgorithm() = default;
 
     const QSet<QPointF> result() { return _hull; };
 
