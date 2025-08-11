@@ -1,5 +1,5 @@
+build
 CMakeLists.txt.user
 venv/
-samples/
-build/
 Flamegraph/
+samples
