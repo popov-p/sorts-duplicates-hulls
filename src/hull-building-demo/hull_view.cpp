@@ -83,6 +83,7 @@ void HullView::connectPoints(const QSet<QPointF>& hull_points, const QColor& col
         _lines.append(line);
     }
 }
+
 void HullView::clearAll() {
     clearLines();
     clearPoints();

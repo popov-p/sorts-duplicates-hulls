@@ -11,14 +11,10 @@
 
 class QuickConvexHullAlgorithm : public IHullAlgorithm {
     Q_OBJECT
-signals:
-    void finished(const QSet<QPointF>& convex_hull_points);
 public:
     explicit QuickConvexHullAlgorithm(QObject* parent = nullptr);
     ~QuickConvexHullAlgorithm() = default;
     void compute(const QVector<QPointF>& points);
-
-    const QSet<QPointF> result() const override;
 private:
     static int findSide(const QPointF& p1, const QPointF& p2, const QPointF& p) {
         qreal val = (p.y() - p1.y()) * (p2.x() - p1.x()) - (p2.y() - p1.y()) * (p.x() - p1.x());
@@ -50,7 +46,5 @@ private:
         int _side;
     };
 
-    QVector<QPointF> _data;
-    QSet<QPointF> _convex_hull;
     QMutex _hull_mutex;
 };

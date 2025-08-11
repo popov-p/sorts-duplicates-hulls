@@ -7,7 +7,7 @@ void test_quicksort() {
     int qsort_num_threads_values[] = {1, 4, 8, 12};
     int64_t min_size_values[] = {10000000, 2000000, 200000000};
 
-    size_t qsort_n = 2000000000;
+    size_t qsort_n = 200000;
     // size_t qsort_n = 20000000;
     size_t qsort_out = 0;
     const char* qsort_input_data = "qsort_random_data.bin";
@@ -30,7 +30,7 @@ void test_bucketsort() {
     uint8_t bsort_n_bucket_values[] = {8, 16, 24, 32};
     uint8_t bsort_interval_values[] = {8, 12, 16, 24, 32};
 
-    size_t bsort_n = 1000000;
+    size_t bsort_n = 10000;
     size_t bsort_out = 0;
     const char* bsort_input_data = "bsort_random_data.bin";
 
@@ -53,7 +53,7 @@ void test_bucketsort() {
 
 
 int main() {
-    // test_quicksort();
+    test_quicksort();
     test_bucketsort();
     return 0;
 }

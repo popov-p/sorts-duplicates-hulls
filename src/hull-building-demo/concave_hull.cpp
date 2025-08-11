@@ -57,7 +57,7 @@ void ConcaveHullAlgorithm::compute(const QVector<QPointF>& points, const QVector
             break;
     }
 
-    _concave_hull = {H.begin(), H.end()};
+    _hull = {H.begin(), H.end()};
     emit finished(QSet<QPointF>(H.begin(), H.end()));
 }
 

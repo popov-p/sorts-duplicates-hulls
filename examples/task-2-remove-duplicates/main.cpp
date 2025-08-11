@@ -83,9 +83,9 @@ void process_unique_data(const char* input_filename, const char* output_filename
 int main() {
     const char* input_filename = "test_data.txt";
     const char* output_filename = "result_data.txt";
-    size_t num_lines = 10000000;
+    // size_t num_lines = 10000000;
 
-    generate_random_data(input_filename, num_lines);
+    // generate_random_data(input_filename, num_lines);
 
     process_unique_data(input_filename, output_filename);
 

@@ -16,10 +16,7 @@ public:
     ConcaveHullAlgorithm(QObject* parent = nullptr);
 
     void compute(const QVector<QPointF>& points, const QVector<QPointF>& convex_hull, const qreal gamma = 1.5);
-    virtual const QSet<QPointF> result() const { return _concave_hull; }
 private:
-    QSet<QPointF> _concave_hull;
-
     static Candidate checkCandidate(int idx, const QVector<QPointF>& G, const QPointF& pb, const QPointF& pe, qreal gamma, const QVector<QPointF>& H, double currentSmin) {
         Candidate c;
         c.index = idx;

@@ -16,7 +16,7 @@ public:
     explicit IHullAlgorithm(QObject* parent = nullptr) : QObject(parent) {}
     virtual ~IHullAlgorithm() = default;
 
-    virtual const QSet<QPointF> result() const = 0;
+    const QSet<QPointF> result() { return _hull; };
 
     static QVector<QPointF> sortPointsClockwise(const QSet<QPointF>& points) {
         if (points.isEmpty())
@@ -43,5 +43,5 @@ public:
 signals:
     void finished(const QSet<QPointF>& hull_points);
 protected:
-    QVector<QPointF> _points;
+    QSet<QPointF> _hull;
 };

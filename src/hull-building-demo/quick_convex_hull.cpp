@@ -7,39 +7,33 @@
 QuickConvexHullAlgorithm::QuickConvexHullAlgorithm(QObject* parent)
     : IHullAlgorithm(parent) {};
 
-
-const QSet<QPointF> QuickConvexHullAlgorithm::result() const {
-    return _convex_hull;
-}
-
 void QuickConvexHullAlgorithm::compute(const QVector<QPointF>& points) {
-    _convex_hull.clear();
-    _data = points;
+    _hull.clear();
 
-    if (_data.size() < 3) {
+    if (points.size() < 3) {
         qWarning() << "Convex hull not possible (less than 3 points)";
         emit finished({});
         return;
     }
 
     int min_x = 0, max_x = 0;
-    for (int i = 1; i < _data.size(); ++i) {
-        if (_data[i].x() < _data[min_x].x()) min_x = i;
-        if (_data[i].x() > _data[max_x].x()) max_x = i;
+    for (int i = 1; i < points.size(); ++i) {
+        if (points[i].x() < points[min_x].x()) min_x = i;
+        if (points[i].x() > points[max_x].x()) max_x = i;
     }
 
     QThreadPool* pool = QThreadPool::globalInstance();
     int old_max_threads = pool->maxThreadCount();
     pool->setMaxThreadCount(QThread::idealThreadCount());
 
-    pool->start(new QuickConvexHullTask(this, _data, _data[min_x], _data[max_x], 1));
-    pool->start(new QuickConvexHullTask(this, _data, _data[min_x], _data[max_x], -1));
+    pool->start(new QuickConvexHullTask(this, points, points[min_x], points[max_x], 1));
+    pool->start(new QuickConvexHullTask(this, points, points[min_x], points[max_x], -1));
 
     pool->waitForDone();
 
     pool->setMaxThreadCount(old_max_threads);
 
-    emit finished(_convex_hull);
+    emit finished(_hull);
 }
 
 void QuickConvexHullAlgorithm::quickHullParallelImpl(
@@ -58,8 +52,8 @@ void QuickConvexHullAlgorithm::quickHullParallelImpl(
     }
     if (idx == -1) {
         QMutexLocker locker(&_hull_mutex);
-        _convex_hull.insert(p1);
-        _convex_hull.insert(p2);
+        _hull.insert(p1);
+        _hull.insert(p2);
         return;
     }
 
